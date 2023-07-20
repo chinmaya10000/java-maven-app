@@ -29,6 +29,10 @@ pipeline {
             steps {
                 script {
                     echo "deploying the docker image to ec2..."
+                    def dockerCmd = 'docker run -d -p 8090:8080 chinmayapradhan/java-maven-app:1.0'
+                    sshagent(['ec2-server-key']) {
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@3.145.199.137 '${dockerCmd}'"
+                    }
                 }
             }
         }
