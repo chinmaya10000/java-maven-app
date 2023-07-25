@@ -1,5 +1,7 @@
 #!/usr/bin/env groovy
 
+@Library('jarproj-shared-library')
+
 def gv
 
 pipeline {
@@ -7,6 +9,10 @@ pipeline {
     agent any 
     tools {
         maven 'Maven'
+    }
+
+    environment {
+        IMAGE_NAME = 'chinmayapradhan/java-maven-app:1.0'
     }
     stages {
         stage("init") {
@@ -26,9 +32,9 @@ pipeline {
         stage("build and push image") {
             steps {
                 script {
-                    buildImage()
+                    buildImage(env.IMAGE_NAME)
                     dockerLogin()
-                    dockerPush()
+                    dockerPush(env.IMAGE_NAME)
                 }
             }
         }
