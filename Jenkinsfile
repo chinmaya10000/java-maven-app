@@ -17,14 +17,16 @@ pipeline {
         stage("build jar") {
             steps {
                 script {
-                    gv.buildJar()
+                    buildJar()
                 }
             }
         }
-        stage("build image") {
+        stage("build and push image") {
             steps {
                 script {
-                    gv.buildImage()
+                    buildImage()
+                    dockerLogin()
+                    dockerPush()
                 }
             }
         }
