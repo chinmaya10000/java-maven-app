@@ -1,7 +1,4 @@
 #!/usr/bin/env groovy
-
-@Library('jarproj-shared-library')
-
 def gv
 
 pipeline {
@@ -9,10 +6,6 @@ pipeline {
     agent any 
     tools {
         maven 'Maven'
-    }
-
-    environment {
-        IMAGE_NAME = 'chinmayapradhan/java-maven-app:1.0'
     }
     stages {
         stage("init") {
@@ -25,16 +18,20 @@ pipeline {
         stage("build jar") {
             steps {
                 script {
-                    buildJar()
+                    echo "building the application for branch $BRANCH_NAME"
+                    sh 'mvn package'
                 }
             }
         }
         stage("build and push image") {
             steps {
                 script {
-                    buildImage(env.IMAGE_NAME)
-                    dockerLogin()
-                    dockerPush(env.IMAGE_NAME)
+                    echo 'building the docker image..'
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                        sh 'docker build -t chinmayapradhan/java-maven-app:2.0 .'
+                        sh "echo $PASS | docker login -u $USER --password-stdin"
+                        sh 'docker push chinmayapradhan/java-maven-app:2.0'
+                    }
                 }
             }
         }
