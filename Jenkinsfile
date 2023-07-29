@@ -1,4 +1,6 @@
 #!/usr/bin/env groovy
+
+@Library('jenkins-shared-library')
 def gv
 
 pipeline {
@@ -18,20 +20,16 @@ pipeline {
         stage("build jar") {
             steps {
                 script {
-                    echo "building the application for branch $BRANCH_NAME"
-                    sh 'mvn package'
+                    buildJar()
                 }
             }
         }
         stage("build and push image") {
             steps {
                 script {
-                    echo 'building the docker image..'
-                    withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                        sh 'docker build -t chinmayapradhan/java-maven-app:2.0 .'
-                        sh "echo $PASS | docker login -u $USER --password-stdin"
-                        sh 'docker push chinmayapradhan/java-maven-app:2.0'
-                    }
+                    buildImage()
+                    dockerLogin()
+                    dockerPush()
                 }
             }
         }
