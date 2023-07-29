@@ -1,5 +1,3 @@
-#!/usr/bin/env groovy
-
 pipeline {
 
     agent any 
@@ -10,9 +8,9 @@ pipeline {
         stage("increment version") {
             steps {
                 script {
-                    echo "Incrementing the version.."
+                    echo "Incrementing app version.."
                     sh 'mvn buld-helper:parse-version versions:set \
-                        -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.nextIncrementalVersion} \
+                        -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.newIncrementalVersion} \
                         versions:commit'
                     def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
                     def version = matcher[0][1]
