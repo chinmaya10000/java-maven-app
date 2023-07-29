@@ -45,5 +45,24 @@ pipeline {
                 }
             }
         }
+        stage("commit version update") {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'git-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                        sh 'git config --global user.email "jenkins@example.com"'
+                        sh 'git config --global user.name "jenkins"'
+                        
+                        sh 'git status'
+                        sh 'git branch'
+                        sh 'git config --list'
+                        
+                        sh "git remote set-url origin https://${USER}:${PASS}@github.com/chinmaya10000/java-maven-app.git"
+                        sh 'git add .'
+                        sh 'git commit -m "ci: version bump"'
+                        sh "git push orgin HEAD:jenkins-jobs"
+                    }
+                }
+            }
+        }
     }
 }
