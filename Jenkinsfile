@@ -27,9 +27,9 @@ pipeline {
         stage("build and push image") {
             steps {
                 script {
-                    buildImage()
+                    buildImage('chinmayapradhan/java-maven-app:2.0')
                     dockerLogin()
-                    dockerPush()
+                    dockerPush('chinmayapradhan/java-maven-app:2.0')
                 }
             }
         }
