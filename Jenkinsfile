@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-@Library('jenkins-shared-library')
+@Library('jarproj-shared-library')
 def gv
 
 pipeline {
