@@ -1,3 +1,5 @@
+#!/usr/bin/env groovy
+
 pipeline {
 
     agent any 
@@ -41,7 +43,14 @@ pipeline {
         stage("deploy") {
             steps {
                 script {
-                    echo "deploying the docker image to ec2..." 
+                    echo "deploying the docker image to ec2..."
+                    def shellCmd = "bash ./server-cmds.sh ${IMAGE_NAME}"
+                    def ec2Instance = "ec2-user@3.143.254.53"
+                    sshagent(['ec2-server-key']) {
+                        sh "scp server-cmds.sh ${ec2Instance}:/home/ec2-user"
+                        sh "scp docker-compose.yml ${ec2Instance}:/home/ec2-user"
+                        sh "ssh -o StrictHostKeyChecking=no ${ec2Instance} '${shellCmd}'"
+                    }
                 }
             }
         }
@@ -49,6 +58,8 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'git-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                        sh 'git config --global user.email "jenkins@example.com"'
+                        sh 'git config --global user.name "jenkins"'
                         
                         sh "git remote set-url origin https://${USER}:${PASS}@github.com/chinmaya10000/java-maven-app.git"
                         sh 'git add .'
