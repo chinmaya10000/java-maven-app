@@ -20,10 +20,14 @@ pipeline {
             }
         }
         stage("build push image") {
-            echo "buildng the docker image.."
-            buildImage(env.IMAGE_NAME)
-            dockerLogin()
-            dockerPush(env.IMAGE_NAME)
+            steps {
+                script {
+                    echo "buildng the docker image.."
+                    buildImage(env.IMAGE_NAME)
+                    dockerLogin()
+                    dockerPush(env.IMAGE_NAME)
+                }
+            }
         }
         stage("deploy") {
             steps {
