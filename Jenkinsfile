@@ -8,10 +8,10 @@ pipeline {
                 }
             }
         }
-        stage("test") {
+        stage("build image") {
             steps {
                 script {
-                    echo "testing the application..."
+                    echo "building the docker image..."
                 }
             }
         }
