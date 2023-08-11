@@ -48,3 +48,20 @@ Create kubeconfig file to connect to EKS
 Add AWS credentials on Jenkins for AWS account authentication
 
 Adjust Jenkinsfile to configure EKS cluster deployment
+
+
+#######################################################################################################################
+Install "gettext-base" tool inside Jenkins container
+# docker exec -it <container_name_or_id> /bin/bash
+# apt-get update
+# apt-get install gettext-base
+
+#####################################################
+Create Secret for DockerHub Credentials(inside eks cluster)
+# kubectl get nodes
+# kubectl create secret docker-registry my-registry-key \
+  --docker-server=docker.io \
+  --docker-username=<DockerHub username> \
+  --docker-password=<dockerHub password>
+
+# kubectl get secret
