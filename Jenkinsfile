@@ -2,6 +2,10 @@
 
 pipeline {
     agent any
+    environment {
+        ECR_REPO_URL = '810652276964.dkr.ecr.us-east-2.amazonaws.com'
+        IMAGE_REPO = "${ECR_REPO_URL}/java-maven-app"
+    }
     stages {
         stage("increment version") {
             steps {
@@ -28,10 +32,10 @@ pipeline {
             steps {
                 script {
                     echo "building the docker image..."
-                    withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                        sh "docker build -t chinmayapradhan/java-maven-app:${IMAGE_NAME} ."
-                        sh "echo $PASS | docker login -u $USER --password-stdin"
-                        sh "docker push chinmayapradhan/java-maven-app:${IMAGE_NAME}"
+                    withCredentials([usernamePassword(credentialsId: 'ecr-credentials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                        sh "docker build -t ${IMAGE_REPO}:${IMAGE_NAME} ."
+                        sh "echo $PASS | docker login -u $USER --password-stdin ${ECR_REPO_URL}"
+                        sh "docker push ${IMAGE_REPO}:${IMAGE_NAME}"
                     }
                 }
             }
