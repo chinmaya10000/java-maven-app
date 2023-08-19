@@ -31,17 +31,22 @@ pipeline {
             }
         }
         stage('deploy') {
-            environment {
-                AWS_ACCESS_KEY_ID = credentials('jenkins_aws_access_key_id')
-                AWS_SECRET_ACCESS_KEY = credentials('jenkins_aws_secret_access_key')
-            }
             steps {
                 script {
                     echo "deploy docker image to ec2.."
+                    def awsAccessKey = credentials('jenkins_aws_access_key_id')
+                    def awsSecretKey = credentials('jenkins_aws_secret_access_key')
                     def dockerPullCmd = "docker pull ${DOCKER_REPO}:1.0"
                     def dockerCmd = "docker run -d -p 8080:8080 ${DOCKER_REPO}:1.0"
                     sshagent(['ec2-server-key']) {
-                        sh "ssh -o StrictHostKeyChecking=no ec2-user@3.15.162.177 '${dockerPullCmd} && ${dockerCmd}'"
+                        sh """
+                            ssh -o StrictHostKeyChecking=no ec2-user@3.15.162.177 '
+                            export AWS_ACCESS_KEY_ID=${awsAccessKey} &&
+                            export AWS_SECRET_ACCESS_KEY=${awsSecretKey} &&
+                            ${dockerPullCmd} &&
+                            ${dockerCmd}
+                            '
+                        """
                     }
                 }
             }
