@@ -40,9 +40,9 @@ pipeline {
                     def dockerCmd = "docker run -d -p 8080:8080 ${DOCKER_REPO}:1.0"
                     sshagent(['ec2-server-key']) {
                         sh """
-                            ssh -o StrictHostKeyChecking=no ec2-user@3.15.162.177 '
-                            export AWS_ACCESS_KEY_ID=${awsAccessKey} &&
-                            export AWS_SECRET_ACCESS_KEY=${awsSecretKey} &&
+                            ssh -o StrictHostKeyChecking=no -o SendEnv=AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY ec2-user@3.15.162.177 '
+                            export AWS_ACCESS_KEY_ID=\$AWS_ACCESS_KEY_ID &&
+                            export AWS_SECRET_ACCESS_KEY=\$AWS_SECRET_ACCESS_KEY &&
                             ${dockerPullCmd} &&
                             ${dockerCmd}
                             '
