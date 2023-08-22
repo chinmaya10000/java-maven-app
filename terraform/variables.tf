@@ -11,6 +11,9 @@ variable env_prefix {
     default = "dev"
 }
 variable my_ip {
+    default = "0.0.0.0/0"
+}
+variable jenkins_ip {
     default = "52.14.194.230/32"
 }
 variable instance_type {
