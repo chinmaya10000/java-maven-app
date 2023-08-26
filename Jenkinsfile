@@ -31,9 +31,20 @@ pipeline {
             }
         }
         stage('deploy') {
+            environment {
+                DOCKER_CREDS = credentials('ecr-credentials')
+            }
             steps {
                 script {
                     echo "deploy docker image to ec2.."
+                    
+                    def shellCmd = "bash ./server-cmds.sh ${DOCKER_CREDS_USR} ${DOCKER_CREDS_PSW}"
+
+                    sshagent(['ec2-server-key']) {
+                        sh "scp server-cmds.sh ec2-user@13.58.68.31:/home/ec2-user"
+                        sh "scp docker-compose.yml ec2-user@13.58.68.31:/home/ec2-user"
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@13.58.68.31 '${shellCmd}'"
+                    }
                 }
             }
         }
