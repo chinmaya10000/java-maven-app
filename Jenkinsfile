@@ -1,35 +1,13 @@
 pipeline {
     agent any
     stages {
-        stage("test") {
+        stage("copy files to ansible server") {
             steps {
                 script {
-                    echo "testing the application..."
-                    echo "Executing the pipeline for branch $BRANCH_NAME"
-                }
-            }
-        }
-        stage("build") {
-            when {
-                expression {
-                    BRANCH_NAME == 'master'
-                }
-            }
-            steps {
-                script {
-                    echo "building application.."
-                }
-            }
-        }
-        stage("deploy") {
-            when {
-                expression {
-                    BRANCH_NAME == 'master'
-                }
-            }
-            steps {
-                script {
-                    echo "deploying the application..."
+                    echo "copying all neccessary files to ansible control node"
+                    sshagent(['ansible-server-key']) {
+                        sh "scp -o StrictHostKeyChecking=no ansible/* chinu@18.217.122.111:/home/chinu"
+                    }
                 }
             }
         }
