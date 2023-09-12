@@ -11,7 +11,7 @@ pipeline {
                         withCredentials([sshUserPrivateKey(credentialsId: 'ec2-server-key', keyFileVariable: 'keyfile', usernameVariable: 'user')]) {
                             sh 'scp $keyfile chinu@18.118.119.112:/home/chinu/ssh-key.pem'
                         }
-
+                    }
                 }
             }
         }
