@@ -4,9 +4,9 @@ pipeline {
         stage("copy files to ansible server") {
             steps {
                 script {
-                    echo "copying all neccessary files to ansible control node"
-                    sshagent(['ansible-server-key']) {
-                        sh "scp -o StrictHostKeyChecking=no ansible/* chinu@18.217.122.111:/home/chinu"
+                    echo "Copying all necessary files to the Ansible control node"
+                    withCredentials([sshUserPrivateKey(credentialsId: 'ansible-server-key', keyFileVariable: 'KEYFILE')]) {
+                        sh "scp -o StrictHostKeyChecking=no -i ${KEYFILE} ansible/* chinu@18.118.119.112:/home/chinu/"
                     }
                 }
             }
