@@ -1,0 +1,17 @@
+--- 
+plugin: amazon.aws.aws_ec2
+aws_access_key: AKIAUJ2JLGXFAE456W4M
+aws_secret_key: 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
+
+regions:
+- us-east-2
+
+#filters:
+  #tag:Name: dev*
+  #instance-state-name: running
+
+keyed_groups:
+ - key: tags
+   prefix: tag
+ - key: instance_type
+   prefix: instance_type
