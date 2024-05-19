@@ -1,42 +1,37 @@
 --- 
-- name: Intsall Docker and docker-compose
+- name: Install Docker and Docker-Compose
   hosts: docker_server
   become: yes
   gather_facts: False
   tasks:
-  - name: Install docker
+  - name: Install Docker
     ansible.builtin.yum:
       name: docker
       update_cache: yes
       state: present
-  - name: Install Docker Compose
-    shell: |
-      curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-Linux-x86_64" -o /usr/local/bin/docker-compose
-      chmod +x /usr/local/bin/docker-compose
-    args:
-      creates: /usr/local/bin/docker-compose
-
-  - name: Check Docker Compose version
-    command: "docker-compose --version"
-    register: compose_version
-    changed_when: false
-    failed_when: false
-
-  - name: Print Docker Compose version
-    debug:
-      var: compose_version.stdout_lines
-  - name: start Docker 
+  - name: Install Docker-Compose
+    ansible.builtin.get_url:
+      url: https://github.com/docker/compose/releases/latest/download/docker-compose-Linux-x86_64
+      dest: /usr/local/bin/docker-compose
+      mode: +x
+  - name: Check Docker-Compose version 
+    ansible.builtin.command: docker-compose version
+    register: docker_compose_version
+  - ansible.builtin.debug: msg={{ docker_compose_version.stdout_lines }}
+  - name: Start Docker Daemon
     ansible.builtin.systemd:
       name: docker
       state: started
-  - name: Install pip3
-    ansible.builtin.package:
-      name: python3-pip
-      state: present
-  - name: Install Docker Python and Docker Compose libraries
-    ansible.builtin.pip:
-      name: 
-        - docker
-        - docker-compose
-      state: present
-      extra_args: "--ignore-installed"
+      enabled: yes
+
+- name: Add user to docker group 
+  hosts: docker_server 
+  become: yes
+  tasks:
+  - name: Add ec2-user to docker group 
+    ansible.builtin.user:
+      name: ec2-user
+      groups: docker
+      append: yes
+  - name: Reconnect to server session
+    ansible.builtin.meta: reset_connection
