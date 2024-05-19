@@ -65,7 +65,7 @@ pipeline {
                                 else {
                                     // If the output is not 'found', the file does not exist, so copy it
                                     echo "File does not exist on the remote server. Copying the PEM file."
-                                    sh "scp -o StrictHostKeyChecking=no $keyfile ec2-user@$ANSIBLE_SERVER:/home/ec2-user/ssh-key.pem"
+                                    sh 'scp -o StrictHostKeyChecking=no $keyfile ec2-user@$ANSIBLE_SERVER:/home/ec2-user/ssh-key.pem'
                                 }
                             }
                         }
