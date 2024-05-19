@@ -52,7 +52,22 @@ pipeline {
                         sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ec2-user@${ANSIBLE_SERVER}:/home/ec2-user"
 
                         withCredentials([sshUserPrivateKey(credentialsId: 'ec2-server-key', keyFileVariable: 'keyfile', usernameVariable: 'user')]) {
-                            sh 'scp $keyfile ec2-user@${ANSIBLE_SERVER}:/home/ec2-user/ssh-key.pem'
+                            script {
+                                // Define the SSH command to check if the file exists on the remote server
+                                sshCheckCmd = "ssh -o StrictHostKeyChecking=no ubuntu@${ANSIBLE_SERVER} 'test -e /home/ubuntu/ssh-key.pem && echo found || echo not found'"
+                                // Execute the SSH command and capture the return status
+                                result = sh(script: sshCheckCmd, returnStatus: true)
+                                // Check the return status
+                                if (result == 0) {
+                                    // If the return status is 0, the file exists on the remote server
+                                    echo "File already exists on the remote server. Skipping copy."
+                                }
+                                else {
+                                    // If the return status is not 0, the file does not exist, so copy it
+                                    sh "scp -o StrictHostKeyChecking=no $keyfile ubuntu@$ANSIBLE_SERVER:/home/ubuntu/ssh-key.pem"
+                                }
+                            }
+
                         }
                     }
                 }
