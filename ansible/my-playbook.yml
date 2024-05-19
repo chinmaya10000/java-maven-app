@@ -35,3 +35,19 @@
       append: yes
   - name: Reconnect to server session
     ansible.builtin.meta: reset_connection
+
+- name: Start Docker Container 
+  hosts: all
+  tasks:
+  - ansible.builtin.copy:
+      src: /home/ec2-user/docker-compose.yaml
+      dest: /home/ec2-user/docker-compose.yaml
+  - name: Docker login 
+    community.docker.docker_login:
+      registry_url: https://index.docker.io/v1/
+      username: chinmayapradhan
+      password: chinu@2242
+  - name: Start Container from Compose
+    ansible.builtin.shell:
+      cmd: "docker-compose -f docker-compose.yml up -d"
+      chdir: /home/ec2-user/
