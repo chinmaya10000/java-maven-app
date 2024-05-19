@@ -49,5 +49,5 @@
       password: chinu@2242
   - name: Start Container from Compose
     ansible.builtin.shell:
-      cmd: "IMAGE_NAME=${ANSIBLE_IMAGE_NAME} docker-compose -f docker-compose.yaml up -d"
+      cmd: "docker-compose -f docker-compose.yaml up -d"
       chdir: /home/ec2-user/
