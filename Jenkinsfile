@@ -1,5 +1,9 @@
 pipeline {
     agent any
+    
+    tools {
+        maven 'Maven'
+    }
 
     environment {
         ANSIBLE_SERVER = "52.15.139.106"
