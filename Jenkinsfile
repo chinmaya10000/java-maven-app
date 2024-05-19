@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        ANSIBLE_SERVER = "52.15.139.106"
+        ANSIBLE_SERVER = "3.16.30.55"
     }
 
     stages {
