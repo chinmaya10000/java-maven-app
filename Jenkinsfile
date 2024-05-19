@@ -51,10 +51,10 @@ pipeline {
                         sh "scp -o StrictHostKeyChecking=no ansible/* ec2-user@${ANSIBLE_SERVER}:/home/ec2-user"
                         sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ec2-user@${ANSIBLE_SERVER}:/home/ec2-user"
 
-                        withCredentials([sshUserPrivateKey(credentialsId: 'ansible-server-key', keyFileVariable: 'keyfile', usernameVariable: 'user')]) {
+                        withCredentials([sshUserPrivateKey(credentialsId: 'ec2-server-key', keyFileVariable: 'keyfile', usernameVariable: 'user')]) {
                             script {
                                 // Define the SSH command to check if the file exists on the remote server
-                                sshCheckCmd = "ssh -o StrictHostKeyChecking=no ubuntu@${ANSIBLE_SERVER} 'if [ -e /home/ec2-user/ssh-key.pem.pem ]; then echo found; else echo not found; fi'"
+                                sshCheckCmd = "ssh -o StrictHostKeyChecking=no ec2-user@${ANSIBLE_SERVER} 'if [ -e /home/ec2-user/ssh-key.pem ]; then echo found; else echo not found; fi'"
                                 // Execute the SSH command and capture the output
                                 result = sh(script: sshCheckCmd, returnStdout: true).trim()
                                 // Check the output
