@@ -38,10 +38,17 @@
 
 - name: Start Docker Container 
   hosts: all
+  vars:
+    docker_image_tag: "{{ lookup('env', 'IMAGE_TAG') }}"
   tasks:
   - ansible.builtin.copy:
       src: /home/ec2-user/docker-compose.yaml
       dest: /home/ec2-user/docker-compose.yaml
+  - name: Update Docker Compose file with image tag
+    ansible.builtin.replace:
+      path: /home/ec2-user/docker-compose.yaml
+      regexp: 'image: chinmayapradhan/java-maven-app:.*'
+      replace: "image: chinmayapradhan/java-maven-app:{{ docker_image_tag }}"
   - name: Docker login 
     community.docker.docker_login:
       registry_url: https://index.docker.io/v1/

@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   java-maven-app:
-    image: chinmayapradhan/java-maven-app:1.0
+    image: chinmayapradhan/java-maven-app:${IMAGE_NAME}
     ports:
      - 8080:8080
   postgres:
