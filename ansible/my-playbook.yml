@@ -53,7 +53,7 @@
     community.docker.docker_login:
       registry_url: https://index.docker.io/v1/
       username: chinmayapradhan
-      password: chinu@2242
+      password: xxxxxxxxxxxxx         # Replace with your Docker Hub password
   - name: Start Container from Compose
     ansible.builtin.shell:
       cmd: "docker-compose -f docker-compose.yaml up -d"
