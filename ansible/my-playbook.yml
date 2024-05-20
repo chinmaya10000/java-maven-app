@@ -57,5 +57,4 @@
   - name: Start Container from Compose
     ansible.builtin.shell:
       cmd: "docker-compose -f docker-compose.yaml up -d"
-      args:
-        chdir: /home/ec2-user/
+      chdir: /home/ec2-user/
