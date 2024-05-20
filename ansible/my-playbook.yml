@@ -39,7 +39,7 @@
 - name: Start Docker Container 
   hosts: all
   vars:
-    docker_image_tag: "{{ lookup('env', 'IMAGE_TAG') }}"
+    docker_image_tag: "{{ lookup('env', 'IMAGE_NAME') }}"
   tasks:
   - ansible.builtin.copy:
       src: /home/ec2-user/docker-compose.yaml
