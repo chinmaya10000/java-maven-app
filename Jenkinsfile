@@ -1,48 +1,11 @@
 pipeline {
     agent any
     
-    tools {
-        maven 'Maven'
-    }
-
     environment {
-        ANSIBLE_SERVER = "3.145.50.255"
+        ANSIBLE_SERVER = "18.216.163.174"
     }
 
     stages {
-        stage("increment version") {
-            steps {
-                script {
-                    echo "Incrementing app version.."
-                    sh 'mvn build-helper:parse-version versions:set \
-                        -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.nextIncrementalVersion} \
-                        versions:commit'
-                    def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
-                    def version = matcher[0][1]
-                    env.IMAGE_NAME = "$version-$BUILD_NUMBER"
-                }
-            }
-        }
-        stage("build jar") {
-            steps {
-                script {
-                    echo "Building the application.."
-                    sh 'mvn clean package'
-                }
-            }
-        }
-        stage("build and push image") {
-            steps {
-                script {
-                    echo "build and push the docker image..."
-                    withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                        sh "docker build -t chinmayapradhan/java-maven-app:${IMAGE_NAME} ."
-                        sh "echo $PASS | docker login -u $USER --password-stdin"
-                        sh "docker push chinmayapradhan/java-maven-app:${IMAGE_NAME}"
-                    }
-                }
-            }
-        }
         stage("Copy files to Ansible server") {
             steps {
                 script {
@@ -69,23 +32,6 @@ pipeline {
                                 }
                             }
                         }
-                    }
-                }
-            }
-        }
-        stage("Execute ansible playbook") {
-            steps {
-                script {
-                    echo "Calling ansible playbook to configure ec2 instance"
-                    def remote = [:]
-                    remote.name = "ansible-server"
-                    remote.host = ANSIBLE_SERVER
-                    remote.allowAnyHosts = true
-
-                    withCredentials([sshUserPrivateKey(credentialsId: 'ansible-server-key', keyFileVariable: 'keyfile', usernameVariable: 'user')]) {
-                        remote.user = user 
-                        remote.identityFile = keyfile
-                        sshCommand remote: remote, command: "ansible-playbook my-playbook.yml -e IMAGE_NAME=${env.IMAGE_NAME}"
                     }
                 }
             }
