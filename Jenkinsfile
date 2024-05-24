@@ -47,7 +47,7 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'ansible-server-key', keyFileVariable: 'keyfile', usernameVariable: 'user')]) {
                         remote.user = user
                         remote.identityFile = keyfile
-                        sshCommand remote: remote, command: "ansible-playbook my-playbook.yml"
+                        sshCommand remote: remote, command: "ansible-playbook -i inventory_aws_ec2.yml my-playbook.yml"
                     }
                 }
             }
