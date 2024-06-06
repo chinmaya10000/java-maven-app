@@ -20,6 +20,13 @@ pipeline {
                 }
             }
         }
+        stage("deploy") {
+            steps {
+                scrip {
+                    echo "deploy app"
+                }
+            }
+        }
     }
     post {
         success {
