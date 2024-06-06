@@ -22,7 +22,7 @@ pipeline {
         }
         stage("deploy") {
             steps {
-                scrip {
+                script {
                     echo "deploy app"
                 }
             }
