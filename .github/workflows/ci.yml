@@ -33,7 +33,7 @@ jobs:
     - name: Build and Push Image
       uses: mr-smithers-excellent/docker-build-push@v6
       with:
-        image: chinmayapradhan/java-app:v1.0.0
+        image: chinmayapradhan/java-app
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
