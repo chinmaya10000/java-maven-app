@@ -7,7 +7,6 @@ if [[ $? -ne 0 ]]; then
     echo "deployment ${deploymentName} does not exists"
     kubectl -n my-app apply -f kubernetes/deployment.yaml
     kubectl -n my-app apply -f kubernetes/service.yaml
-    kubectl -n my-app apply -f kubernetes/ingress.yaml
 else
     echo "deployment ${deploymentName} exists"
     echo "image name - ${imageName}"
