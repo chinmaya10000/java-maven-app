@@ -71,12 +71,12 @@ pipeline {
             steps {
                 parallel(
                     "Deployment": {
-                        withKubeConfig(caCertificate: '', clusterName: 'dev-myapp-eks', contextName: '', credentialsId: 'k8s-creds', namespace: 'my-app', restrictKubeConfigAccess: false, serverUrl: 'https://CB0AF6D51C59F24129263DA9514E90B3.gr7.us-east-2.eks.amazonaws.com') {
+                        withKubeConfig(caCertificate: '', clusterName: 'dev-myapp-eks', contextName: '', credentialsId: 'k8s-creds', namespace: 'my-app', restrictKubeConfigAccess: false, serverUrl: 'https://CD2066F36330BA16FD242C270FE14CC0.gr7.us-east-2.eks.amazonaws.com') {
                             sh "bash k8s-deployment.sh" 
                         }
                     },
                     "Rollout Status": {
-                        withKubeConfig(caCertificate: '', clusterName: 'dev-myapp-eks', contextName: '', credentialsId: 'k8s-creds', namespace: 'my-app', restrictKubeConfigAccess: false, serverUrl: 'https://CB0AF6D51C59F24129263DA9514E90B3.gr7.us-east-2.eks.amazonaws.com') {
+                        withKubeConfig(caCertificate: '', clusterName: 'dev-myapp-eks', contextName: '', credentialsId: 'k8s-creds', namespace: 'my-app', restrictKubeConfigAccess: false, serverUrl: 'https://CD2066F36330BA16FD242C270FE14CC0.gr7.us-east-2.eks.amazonaws.com') {
                             sh "bash k8s-deployment-rollout-statu.sh" 
                         }
                     }
