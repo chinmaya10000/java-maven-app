@@ -12,7 +12,7 @@ pipeline {
         serviceName = "java-app"
         imageName = "${ECR_REPO_URL}/my-app:${GIT_COMMIT}"
         AWS_REGION = 'us-east-2'
-        // SCANNER_HOME = tool 'sonar-scanner'
+        SCANNER_HOME = tool 'sonar-scanner'
         AWS_ACCESS_KEY_ID = credentials('jenkins_aws_access_key_id')
         AWS_SECRET_ACCESS_KEY = credentials('jenkins_aws_secret_access_key')
     }
@@ -41,16 +41,16 @@ pipeline {
                 }
             }
         }
-        // stage('SonarQube Analysis') {
-        //     steps {
-        //         script {
-        //             echo "Running SonarQube analysis..."
-        //             withSonarQubeEnv('sonar-server') {
-        //                 sh "mvn sonar:sonar -Dsonar.projectKey=java-maven-app -Dsonar.projectName='java-maven-app'"
-        //             }
-        //         }
-        //     }
-        // }
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    echo "Running SonarQube analysis..."
+                    withSonarQubeEnv('sonar-server') {
+                        sh "mvn sonar:sonar -Dsonar.projectKey=java-maven-app -Dsonar.projectName='java-maven-app'"
+                    }
+                }
+            }
+        }
         stage('Building the App') {
             steps {
                 script {
