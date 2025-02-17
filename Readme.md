@@ -59,6 +59,14 @@ Retrieve the ALB DNS name and access the application via a browser.
 - Access Grafana dashboard: `http://<grafana_url>`
 - Check Prometheus metrics: `http://<prometheus_url>`
 
+## Monitoring Dashboard
+
+### CI/CD Pipeline
+![CI/CD Pipelien](images/cicd.png)
+
+### Prometheus & Grafana Dashboard
+![Grafana Dashboard](images/prometheus-grafana-dashboard.png)
+
 ## Cleanup
 To destroy the infrastructure:
 ```sh
