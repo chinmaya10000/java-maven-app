@@ -13,7 +13,7 @@ This repository contains a Jenkins pipeline that automates the deployment of a J
 - AWS CLI configured with proper permissions
 - Terraform installed
 - Jenkins with necessary plugins (Pipeline, SonarQube, Kubernetes CLI, AWS Credentials)
-- Docker installed on Jenkins agents
+- Docker installed on Jenkins Server
 - Prometheus and Grafana deployed in the EKS cluster
 
 ## Terraform Configuration
